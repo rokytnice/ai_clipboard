@@ -1,0 +1,17 @@
+[project]
+name = "ai-clipboard"
+version = "0.1.0"
+description = "Liest markierten Text per Hotkey aus der Zwischenablage und sendet ihn an Google Gemini"
+authors = [{ name = "André Rochlitz", email = "andre@example.com" }]
+license = "MIT"
+readme = "README.md"
+requires-python = ">=3.8"
+
+dependencies = [
+    "google-generativeai>=0.4.1",
+    "pyperclip>=1.8.2",
+    "keyboard>=0.13.5",
+]
+
+[project.scripts]
+gemini-clip-query = "gemini_clip_query.main:main"
