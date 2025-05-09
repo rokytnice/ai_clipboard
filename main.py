@@ -16,7 +16,7 @@ def main():
     model = genai.GenerativeModel("gemini-1.5-flash")
 
     print("[INFO] LLM-Hintergrunddienst läuft.")
-    print("[INFO] Warte auf Tastenkombination: Strg+Umschalt+Alt ...")
+    print("[INFO] Warte auf Tastenkombination: Strg+Windows ...")
 
 
     # Status der Modifier-Tasten
@@ -26,12 +26,11 @@ def main():
         try:
             if key == keyboard.Key.ctrl_l or key == keyboard.Key.ctrl_r:
                 current_keys.add('ctrl')
-            if key == keyboard.Key.shift_l or key == keyboard.Key.shift_r:
-                current_keys.add('shift')
-            # Wenn Strg und Shift gedrückt sind, auslösen
-            if current_keys == {'ctrl', 'shift'}:
-                print("[INFO] Hotkey erkannt: Strg+Umschalt")
-                # Clipboard-Inhalt loggen
+            if key == keyboard.Key.cmd_l or key == keyboard.Key.cmd_r:
+                current_keys.add('win')
+            # Wenn Strg und Windows gedrückt sind, auslösen
+            if current_keys == {'ctrl', 'win'}:
+                print("[INFO] Hotkey erkannt: Strg+Windows")
                 content = pyperclip.paste().strip()
                 print(f"[LOG] Clipboard-Inhalt: {content}")
                 handle_clipboard(content)
@@ -42,8 +41,8 @@ def main():
         try:
             if key == keyboard.Key.ctrl_l or key == keyboard.Key.ctrl_r:
                 current_keys.discard('ctrl')
-            if key == keyboard.Key.shift_l or key == keyboard.Key.shift_r:
-                current_keys.discard('shift')
+            if key == keyboard.Key.cmd_l or key == keyboard.Key.cmd_r:
+                current_keys.discard('win')
         except Exception as e:
             print(f"[ERROR] Fehler beim Loslassen der Taste: {e}")
 
@@ -69,7 +68,7 @@ def main():
         except Exception as e:
             print(f"❌ Fehler: {e}")
 
-    print("[INFO] Eingabewarteschleife aktiv – das Programm ist bereit.")
+    print("[INFO] Eingabewarteschleife aktiv – das Programm ist bereit (Hotkey: Strg+Windows).")
     with keyboard.Listener(on_press=on_press, on_release=on_release) as listener:
         listener.join()
 
