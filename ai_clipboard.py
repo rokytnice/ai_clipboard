@@ -1,4 +1,4 @@
-# Datei: ai_clipboard/main.py
+# Datei: ai_clipboard/ai_clipboard.py
 
 import google.generativeai as genai
 import os

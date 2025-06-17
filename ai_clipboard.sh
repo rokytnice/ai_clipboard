@@ -57,7 +57,7 @@ echo "Running Python script: $project_dir/main.py"
 # Now, python_cmd (or just 'python3' or 'python') will refer to the venv's interpreter
 $python_cmd "$project_dir/main.py"
 # Or simply:
-# python3 "$project_dir/main.py"
+# python3 "$project_dir/ai_clipboard.py"
 
 # Deactivate the virtual environment
 echo "Deactivating virtual environment."
@@ -96,7 +96,7 @@ if [ ! -f "$project_dir/ai_clipboard_requirements.txt" ]; then
 fi
 
 # Run the Python script
-$python_interpreter "$project_dir/main.py"
+$python_interpreter "$project_dir/ai_clipboard.py"
 
 # Deactivate the virtual environment
 deactivate
