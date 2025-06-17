@@ -4,9 +4,6 @@
 xhost +SI:localuser:$(whoami)
 
 # Set the project directory
-# Using $(dirname "$0") is often more robust if the script can be called from other directories
-# For simplicity, if you always run it from the project root, pwd is fine.
-# project_dir=$(pwd)
 project_dir=$(cd "$(dirname "$0")" && pwd) # More robust way to get script's directory
 echo "Project Directory: $project_dir"
 
@@ -15,7 +12,6 @@ venv_name="myenv" # This is the venv the script manages
 venv_path="$project_dir/$venv_name"
 
 # Python command to use for creating venv and running the script (after venv activation)
-# This will resolve to the system python3 initially, then the venv's python3 after activation.
 python_cmd="python3"
 
 # Check if requirements file exists BEFORE trying to use it
@@ -48,55 +44,35 @@ echo "Installing dependencies from $requirements_file"
 pip install -r "$requirements_file"
 if [ $? -ne 0 ]; then
   echo "Error: Failed to install dependencies."
-  deactivate
+  # Attempt to deactivate even if install fails, before exiting
+  if command -v deactivate &> /dev/null
+  then
+    deactivate
+  fi
   exit 1
 fi
 
 # Run the Python script using the virtual environment's Python
-echo "Running Python script: $project_dir/main.py"
-# Now, python_cmd (or just 'python3' or 'python') will refer to the venv's interpreter
-$python_cmd "$project_dir/main.py"
-# Or simply:
-# python3 "$project_dir/ai_clipboard.py"
+# CORRECTED PYTHON SCRIPT NAME BELOW:
+python_script_name="ai_clipboard.py"
+echo "Running Python script: $project_dir/$python_script_name"
 
-# Deactivate the virtual environment
-echo "Deactivating virtual environment."
-deactivate#!/bin/bash
-
-
-
-xhost +SI:localuser:$(whoami)
-
-
-# Set the project directory (adjust as needed)
-project_dir=$(pwd)
-echo "Project Directory: $project_dir"
-# Set the Python interpreter (adjust if needed)
-python_interpreter="/usr/bin/python3"
-
-# Set the virtual environment name
-venv_name="myenv"
-
-# Create the virtual environment
-if [ ! -d "$venv_name" ]; then
-  python3 -m venv "$venv_name"
-fi
-
-# Activate the virtual environment
-source "$venv_name/bin/activate"
-
-# Install dependencies (replace with your ai_clipboard_requirements.txt)
-pip install -r "$project_dir/ai_clipboard_requirements.txt"
-
-# Check if ai_clipboard_requirements.txt exists
-if [ ! -f "$project_dir/ai_clipboard_requirements.txt" ]; then
-  echo "Error: requirements.txt not found in $project_dir."
-  deactivate
+if [ ! -f "$project_dir/$python_script_name" ]; then
+  echo "Error: Python script not found: $project_dir/$python_script_name"
+  if command -v deactivate &> /dev/null
+  then
+    deactivate
+  fi
   exit 1
 fi
 
-# Run the Python script
-$python_interpreter "$project_dir/ai_clipboard.py"
+$python_cmd "$project_dir/$python_script_name"
 
 # Deactivate the virtual environment
-deactivate
+echo "Deactivating virtual environment."
+if command -v deactivate &> /dev/null
+then
+  deactivate
+else
+  echo "Warning: 'deactivate' command not found. Virtual environment might still be active in this shell if sourced."
+fi

@@ -53,6 +53,7 @@ def main():
                 return
 
             prompt = f"Verbessere den folgenden Text:\n{content}"
+            prompt = f"\n{content}"
             print(f"[LOG] Request an Gemini: {prompt}")
             response = model.generate_content(prompt)
             reply = response.text.strip()
