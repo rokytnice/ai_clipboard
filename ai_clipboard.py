@@ -6,15 +6,20 @@ import pyperclip
 import time
 from pynput import keyboard
 import pyautogui
-
 def main():
     api_key = os.getenv("GEMINI_API_KEY")
     if not api_key:
         raise RuntimeError("Umgebungsvariable GEMINI_API_KEY ist nicht gesetzt!")
 
     genai.configure(api_key=api_key)
-    model = genai.GenerativeModel("gemini-1.5-flash")
 
+    # NEUE LOGIK: Lese den Modellnamen aus der Umgebungsvariable GOOGLE_LLM.
+    # Falls sie nicht gesetzt ist, wird ein Standardmodell verwendet.
+    default_model = "gemini-1.5-flash-latest"
+    model_name = os.getenv("GOOGLE_LLM", default_model)
+    model = genai.GenerativeModel(model_name)
+
+    print(f"[INFO] Verwende das Modell: {model_name}")
     print("[INFO] LLM-Hintergrunddienst läuft.")
     print("[INFO] Warte auf Tastenkombination: Strg+Windows ...")
 
@@ -52,13 +57,14 @@ def main():
                 print("⚠️ Zwischenablage ist leer.")
                 return
 
-            prompt = f"Verbessere den folgenden Text:\n{content}"
-            prompt = f"\n{content}"
-            print(f"[LOG] Request an Gemini: {prompt}")
+            # Der Prompt wurde vereinfacht, um den Text direkt zu verarbeiten.
+            # Gemini ist gut darin, den Kontext "verbessere diesen Text" zu verstehen.
+            prompt = content
+            print(f"[LOG] Request an Gemini: {prompt[:80]}...") # Kürzt lange Prompts im Log
             response = model.generate_content(prompt)
             reply = response.text.strip()
 
-            print(f"[LOG] Response von Gemini: {reply}")
+            print(f"[LOG] Response von Gemini: {reply[:80]}...")
 
 
             # Antwort in Zwischenablage kopieren und STRG+V simulieren (Umlaute/Sonderzeichen sicher)
@@ -72,7 +78,6 @@ def main():
     print("[INFO] Eingabewarteschleife aktiv – das Programm ist bereit (Hotkey: Strg+Windows).")
     with keyboard.Listener(on_press=on_press, on_release=on_release) as listener:
         listener.join()
-
 
 if __name__ == "__main__":
     main()
