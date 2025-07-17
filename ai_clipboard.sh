@@ -15,7 +15,7 @@ venv_path="$project_dir/$venv_name"
 python_cmd="python3"
 
 # Check if requirements file exists BEFORE trying to use it
-requirements_file="$project_dir/ai_clipboard_requirements.txt"
+requirements_file="$project_dir/ai_clipboard_gemini_requirements.txt"
 if [ ! -f "$requirements_file" ]; then
   echo "Error: Requirements file not found: $requirements_file"
   exit 1

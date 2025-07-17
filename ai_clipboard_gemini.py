@@ -1,11 +1,22 @@
 # Datei: ai_clipboard/ai_clipboard_gemini.py
 
+import http.client as http_client
+import logging
 import google.generativeai as genai
 import os
 import pyperclip
 import time
 from pynput import keyboard
 import pyautogui
+
+# Netzwerkverkehr-Logging aktivieren
+http_client.HTTPSConnection.debuglevel = 1
+logging.basicConfig()
+logging.getLogger().setLevel(logging.DEBUG)
+requests_log = logging.getLogger("requests.packages.urllib3")
+requests_log.setLevel(logging.DEBUG)
+requests_log.propagate = True
+
 def main():
     api_key = os.getenv("GEMINI_API_KEY")
     if not api_key:
@@ -13,10 +24,10 @@ def main():
 
     genai.configure(api_key=api_key)
 
-    # NEUE LOGIK: Lese den Modellnamen aus der Umgebungsvariable GOOGLE_LLM.
+    # NEUE LOGIK: Lese den Modellnamen aus der Umgebungsvariable GEMINI_LLM.
     # Falls sie nicht gesetzt ist, wird ein Standardmodell verwendet.
     default_model = "gemini-1.5-flash-latest"
-    model_name = os.getenv("GOOGLE_LLM", default_model)
+    model_name = os.getenv("GEMINI_LLM", default_model)
     model = genai.GenerativeModel(model_name)
 
     print(f"[INFO] Verwende das Modell: {model_name}")
