@@ -54,7 +54,7 @@ fi
 
 # Run the Python script using the virtual environment's Python
 # CORRECTED PYTHON SCRIPT NAME BELOW:
-python_script_name="ai_clipboard.py"
+python_script_name="ai_clipboard_gemini.py"
 echo "Running Python script: $project_dir/$python_script_name"
 
 if [ ! -f "$project_dir/$python_script_name" ]; then
