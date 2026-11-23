@@ -1,0 +1,7 @@
+_tmp/
+myenv/
+.venv/
+build/
+__pycache__/
+*.pyc
+ai_clipboard.egg-info/
